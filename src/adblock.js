@@ -2,6 +2,8 @@
 /* global fetch:writable */
 import { configRead } from './config';
 
+export function userScriptStartAdBlock() {}
+
 /**
  * This is a minimal reimplementation of the following uBlock Origin rule:
  * https://github.com/uBlockOrigin/uAssets/blob/3497eebd440f4871830b9b45af0afc406c6eb593/filters/filters.txt#L116

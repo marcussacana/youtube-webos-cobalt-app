@@ -1,11 +1,13 @@
 import 'whatwg-fetch';
 import './domrect-polyfill';
 import './adblock.js';
+import './nonstop.js';
 import './sponsorblock.js';
 import './ui.js';
 
 import { handleLaunch, waitForChildAdd } from './utils';
 import { userScriptStartAdBlock } from './adblock.js';
+import { userScriptStartNonStop } from './nonstop.js';
 import { userScriptStartSponsorBlock } from './sponsorblock.js';
 import { userScriptStartUI } from './ui.js';
 
@@ -53,9 +55,10 @@ document.addEventListener(
 })();
 
 export function startUserScript() {
-  userScriptStartAdBlock();
-  userScriptStartSponsorBlock();
-  userScriptStartUI();
+  try {  userScriptStartAdBlock(); } catch {}
+  try {  userScriptStartSponsorBlock(); } catch {}
+  try {  userScriptStartUI(); } catch {}
+  try {  userScriptStartNonStop(); } catch {}
 }
 
 (function () {

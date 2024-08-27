@@ -18,6 +18,7 @@ function logoHideShow() {
 }
 
 export function userScriptStartUI() {
+  console.info('UI Creation Started');
   // We handle key events ourselves.
   window.__spatialNavigation__.keyMode = 'NONE';
 
@@ -91,6 +92,16 @@ export function userScriptStartUI() {
       callbackConfig('enableAdBlock')
     )
   );
+	
+  uiContainer.appendChild(
+    checkboxTools.add(
+      '__nonstop',
+      'Enable NonStop',
+      configRead('enableNonStop'),
+      callbackConfig('enableNonStop')
+    )
+  );
+	
   uiContainer.appendChild(
     checkboxTools.add(
       '__sponsorblock',
@@ -166,7 +177,7 @@ export function userScriptStartUI() {
 
   const sponsorLink = document.createElement('div');
   sponsorLink.classList.add('small');
-  sponsorLink.innerHTML = `Sponsor segments skipping - https://sponsor.ajay.app`;
+  sponsorLink.innerHTML = `Sponsor segments skipping`;
   uiContainer.appendChild(sponsorLink);
 
   document.querySelector('body').appendChild(uiContainer);
@@ -205,13 +216,13 @@ export function userScriptStartUI() {
   }
 
   const eventHandler = (evt) => {
-    console.info(
+    /*console.info(
       'Key event:',
       evt.type,
       evt.charCode,
       evt.keyCode,
       evt.defaultPrevented
-    );
+    );*/
     if (evt.charCode == 404 || evt.charCode == 172) {
       console.info('Taking over!');
       evt.preventDefault();

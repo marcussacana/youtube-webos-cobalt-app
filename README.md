@@ -19,6 +19,7 @@ YouTube App with extended functionalities
 ## Features
 
 - Advertisements blocking
+- Youtube NonStop implementation
 - [SponsorBlock](https://sponsor.ajay.app/) integration
 - [Autostart](#autostart)
 

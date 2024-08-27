@@ -1,4 +1,4 @@
-import * as sha256 from 'tiny-sha256';
+import sha256 from 'tiny-sha256';
 import { configRead } from './config';
 import { showNotification } from './ui';
 
@@ -62,38 +62,43 @@ class SponsorBlockHandler {
   }
 
   async init() {
-    const videoHash = sha256(this.videoID).substring(0, 4);
-    const categories = [
-      'sponsor',
-      'intro',
-      'outro',
-      'interaction',
-      'selfpromo',
-      'music_offtopic'
-    ];
-    const resp = await fetch(
-      `${sponsorblockAPI}/skipSegments/${videoHash}?categories=${encodeURIComponent(
-        JSON.stringify(categories)
-      )}`
-    );
-    const results = await resp.json();
+	console.info('SponsorBlock: Initializing for ' + this.videoID);
+	try {
+		const videoHash = sha256(this.videoID).substring(0, 4);
+		const categories = [
+		  'sponsor',
+		  'intro',
+		  'outro',
+		  'interaction',
+		  'selfpromo',
+		  'music_offtopic'
+		];
+		const resp = await fetch(
+		  `${sponsorblockAPI}/skipSegments/${videoHash}?categories=${encodeURIComponent(JSON.stringify(categories))}`
+		  //`${sponsorblockAPI}/skipSegments/?videoID=${this.videoID}&categories=${encodeURIComponent(JSON.stringify(categories))}`
+		);
+		const results = await resp.json();
 
-    const result = results.find((v) => v.videoID === this.videoID);
-    console.info(this.videoID, 'Got it:', result);
+		const result = results.find((v) => v.videoID === this.videoID);
+		//const result = {'segments': results};
+		console.info(this.videoID, 'Got it:', result);
 
-    if (!result || !result.segments || !result.segments.length) {
-      console.info(this.videoID, 'No segments found.');
-      return;
-    }
+		if (!result || !result.segments || !result.segments.length) {
+		  console.info(this.videoID, 'No segments found.');
+		  return;
+		}
 
-    this.segments = result.segments;
-    this.skippableCategories = this.getSkippableCategories();
+		this.segments = result.segments;
+		this.skippableCategories = this.getSkippableCategories();
 
-    this.scheduleSkipHandler = () => this.scheduleSkip();
-    this.durationChangeHandler = () => this.buildOverlay();
+		this.scheduleSkipHandler = () => this.scheduleSkip();
+		this.durationChangeHandler = () => this.buildOverlay();
 
-    this.attachVideo();
-    this.buildOverlay();
+		this.attachVideo();
+		this.buildOverlay();
+	} catch (e) {
+		console.error(e);
+	}
   }
 
   getSkippableCategories() {
